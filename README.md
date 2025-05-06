@@ -75,7 +75,17 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 ### 3. Build & Push Docker Image
 
 ```bash
-docker build -t aliahasan/ostad-mastering_devops_batch001-module06:rapidcomp_app-v1 .
+# from <working‑dir>
+docker build -t rapidcomp_local:test .
+docker run -p 8000:8000 rapidcomp_local:test
+# open http://localhost:8000 to confirm it works
+docker stop $(docker ps -q --filter ancestor=rapidcomp_local:test)
+
+docker tag rapidcomp_local:test \
+           aliahasan/ostad-mastering_devops_batch001-module06:rapidcomp_app-v1
+
+docker login      
+# enter Docker Hub creds if not already logged in
 docker push aliahasan/ostad-mastering_devops_batch001-module06:rapidcomp_app-v1
 ```
 
