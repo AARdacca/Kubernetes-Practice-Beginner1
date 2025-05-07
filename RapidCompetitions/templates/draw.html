@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Draw</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .draw-button {
+      background-color: #ffc841;
+      color: #fff;
+    }
+    .draw-button:hover {
+      background-color: #ffc841;
+      color: #fff;
+    }
+    .competition-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .card-custom {
+      min-height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container mt-5">
+    <ul class="nav nav-tabs" id="manualDrawTabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="active-competitions-tab" data-toggle="tab" href="#active-competitions" role="tab" aria-controls="active-competitions" aria-selected="true">Active Competitions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="competition-details-tab" data-toggle="tab" href="#competition-details" role="tab" aria-controls="competition-details" aria-selected="false">Competition Details</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="manualDrawTabsContent">
+      <div class="tab-pane fade show active" id="active-competitions" role="tabpanel" aria-labelledby="active-competitions-tab">
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h3>Active Competitions</h3>
+            <div class="list-group competition-list">
+              <a href="#" class="list-group-item list-group-item-action" data-competition='{"title": "Competition 1", "details": "Details of Competition 1", "start_date": "2023-06-01", "end_date": "2023-06-30"}'>Competition 1</a>
+              <a href="#" class="list-group-item list-group-item-action" data-competition='{"title": "Competition 2", "details": "Details of Competition 2", "start_date": "2023-07-01", "end_date": "2023-07-31"}'>Competition 2</a>
+              <a href="#" class="list-group-item list-group-item-action" data-competition='{"title": "Competition 3", "details": "Details of Competition 3", "start_date": "2023-08-01", "end_date": "2023-08-31"}'>Competition 3</a>
+              <a href="#" class="list-group-item list-group-item-action" data-competition='{"title": "Competition 4", "details": "Details of Competition 4", "start_date": "2023-09-01", "end_date": "2023-09-30"}'>Competition 4</a>
+              <a href="#" class="list-group-item list-group-item-action" data-competition='{"title": "Competition 5", "details": "Details of Competition 5", "start_date": "2023-10-01", "end_date": "2023-10-31"}'>Competition 5</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="competition-details" role="tabpanel" aria-labelledby="competition-details-tab">
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <h3>Competition Details</h3>
+            <div class="card card-custom mb-4">
+              <div class="card-body">
+                <h5 class="card-title" id="competition-title">Select a competition</h5>
+                <p class="card-text" id="competition-details-text">Details will be shown here.</p>
+                <p class="card-text"><strong>Start Date:</strong> <span id="competition-start-date">-</span></p>
+                <p class="card-text"><strong>End Date:</strong> <span id="competition-end-date">-</span></p>
+              </div>
+            </div>
+            <div class="text-center">
+              <button class="btn draw-button btn-lg" data-toggle="modal" data-target="#drawModal">Draw</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="drawModal" tabindex="-1" aria-labelledby="drawModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="drawModalLabel">Draw Result</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="draw-result-text">Congratulations! You have selected a winner.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#manualDrawTabs a').on('click', function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+      });
+
+      $('.competition-list .list-group-item').on('click', function () {
+        var competitionData = $(this).data('competition');
+        
+        $('#competition-title').text(competitionData.title);
+        $('#competition-details-text').text(competitionData.details);
+        $('#competition-start-date').text(competitionData.start_date);
+        $('#competition-end-date').text(competitionData.end_date);
+        
+        $('#competition-details-tab').tab('show');
+      });
+    });
+  </script>
+</body>
+</html>

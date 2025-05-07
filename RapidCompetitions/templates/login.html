@@ -1,0 +1,75 @@
+{% extends "./partials/base.html" %}
+
+{% load static %}
+{% block title %}
+<title>Rapid Competitions Login</title>
+{% endblock title %}
+
+{% block links %}
+    <link rel="stylesheet" href={%static "css/login.css"%}>
+{% endblock links %}
+
+
+{% block content %}
+
+<div class="container-fluid login-container">
+    <div class="row">
+        <div class="col-lg-6 col-md-12 login-left">
+            <div class="login">
+                <div class="wellcome">
+                    <h2>Wellcome Back</h2>
+                    <p>Wellcome Back! Please enter your details</p>
+                </div>
+                <div class="login-form">
+                    <form action="/auth/login" method="POST">
+                        {% csrf_token %}
+                        <div class="input-section">
+                            <label for="email"> 
+                                Email&nbsp;
+                                <span>*</span>
+                            </label>
+                            <input type="email" name="email" id="email" placeholder="Enter your Email"><br>
+                        </div>
+                        <div class="input-section">
+                            <label for="password">Password&nbsp; <span>*</span></label>
+                            <input type="password" name="password" id="password" placeholder="Enter your Password">
+                        </div>
+
+                        <div
+                            class="g-recaptcha"
+                            data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                            >
+
+                            </div>
+
+                        <div class="extra-fields">
+                            <div class="checkbox-section">
+                                <input type="checkbox" name="remember_me" id="remember_me">
+                                <label for="remember_me">Remember me</label>
+                            </div>
+
+                            <a href="#">Lost your password?</a>
+                        </div>
+                        <input type="submit" value="Login" class="submit-btn">
+
+                    </form>
+                    <button class="social-login google" onclick="location.href='{% url 'social:begin' 'google-oauth2' %}'"><i class="fa-brands fa-google" style="color: #74C0FC;"></i>Sign in with Google</button>
+                    <p class="register-now"> <span>Don't have an account? </span><a href="/auth/register">Sign Up</a></p>
+                    {% if messages %}
+                  
+                        {% for message in messages %}
+                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red;">{{ message }}</p>
+                        {% endfor %}
+            
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 login-right d-none d-lg-block">
+
+        </div>
+    </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock content %}

@@ -1,0 +1,10 @@
+{% load custum_templatetags %}
+<h1 style="font-weight: bold;" class="text-center p-4">
+    {{i.name}}
+</h1>
+
+{% for j in i|give_me_all_lottery_of_a_category %}
+{% with lottery=j %}
+{% include "./lottary.html" %}
+{% endwith %}
+{% endfor %}

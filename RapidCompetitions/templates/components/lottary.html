@@ -1,0 +1,42 @@
+{% load custum_templatetags %}
+<div class="col-md-3 mb-4">
+    <div class="card custom-card shadow">
+        <a class="card-title" style="text-decoration: none;" href="/competition/competition/{{lottery.id}}/">
+            <div class="position-relative">
+                <img class="card-img-top" src={{lottery.image.url}} alt="image">
+                <div data-date="{{ lottery.draw_in|date:'Y-m-d H:i:s' }}" data-timezone="America/New_York" class="draw-date gold rounded-pill">
+                    {{ lottery.draw_in|date:"F d, Y, g:i A" }}
+                </div>
+            </div>
+        </a>
+        <div class="card-body p-3 text-center">
+            <a class="card-title" style="text-decoration: none; color: black    ;" href="/competition/competition/{{lottery.id}}/">
+                <h6 class="card-title mt-2 h3" style="font-weight: bold !important;">{{lottery.name}}</h6>
+                {% if lottery.cash_alternative %}
+                <p class="mt-2 text-muted"><span style="font-size: 13px;">Cash alternative:</span> <span style="font-weight: bold !important; color: #f2b840;">£{{lottery.cash_alternative}}</span></p>
+                {% endif %}
+            </a>
+                <h5 class="mt-3 h2" style="font-weight: bold !important; color: #f2b840;">£<span id="price_{{lottery.id}}">{{lottery.price}}</span> <span class="sold-percent"></span></h5>
+                <div class="clearfix">
+                    <div style="float: left;">
+                        <span class="sold-percent">Sold: {{lottery.total_sold}}%</span>
+                    </div>
+                    <div style="float:right;">
+                        <span class="sold-percent">{{lottery.total_sold}}/{{lottery.total_available_ticket}}</span>
+                    </div>
+                </div>
+                <div class="progress lottery--progress mb-2" style="height: 8px;">
+                    <div class="progress-bar progress-bar-sm" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: {{lottery.total_sold|perform_percentage:lottery.total_available_ticket}}%; background-color: #f2b840;"></div>
+                </div>
+                <div class="input-group mt-3" style="border: 1px solid #dee2e6; border-radius: .25rem;">
+                    <button class="btn o-btn-outline-quantity button-minus" type="button" onclick="handle_minus({{lottery.id}})"><span class="fa fa-minus"></span></button>
+                    <input type="number" id="quantity_{{lottery.id}}" class="input-text qty text form-control text-center" name="quantity" value="{{lottery.suggested_ticket_quantity}}" title="Qty" size="4" min="0" max="" step="1" placeholder="" inputmode="numeric" autocomplete="off" data-product_id="3838865">
+                    <button class="btn o-btn-outline-quantity button-plus" type="button" onclick="handle_plus({{lottery.id}})"><span class="fa fa-plus"></span></button>
+                </div>
+            <button class="btn btn-sm mt-4 mb-3 rounded full-width-btn entry-btn" style="border-color: #f2b840; color: #f2b840; font-size: 20px !important;" onclick="addToCart({{lottery.id}})">
+                Enter Now <i class="fas fa-ticket fa-fw" style="margin-left: 10px !important;"></i>
+            </button>
+        </div>
+    </div>
+</div>
+

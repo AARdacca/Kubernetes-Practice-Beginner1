@@ -1,0 +1,350 @@
+{% extends "./partials/base.html" %}
+{% load static %}
+{% load custum_templatetags %}
+{% block title %}
+<title>Rapid Competitions</title>
+{% endblock title %}
+
+{% block links %}
+<style>
+    li .active {
+        background-color: #f2b840 !important;
+    }
+    li a {
+        color: black;
+    }
+    .custom-range::-webkit-slider-thumb {
+    background: #f2b840;
+    }
+
+    .custom-range::-moz-range-thumb {
+    background: #f2b840;
+    }
+
+    .custom-range::-ms-thumb {
+    background: #f2b840;
+    }
+</style>
+{% endblock links %}
+
+
+{% block content %}
+<script>
+    function addToCartSingle(id) {
+        var quantity = document.getElementById(`quantity_${id}`).textContent;
+        console.log(quantity);
+
+        var cart = localStorage.getItem('cart');
+            if (!cart) {
+                cart = [];
+            } else {
+
+                cart = JSON.parse(cart);
+            }
+            var newData = {
+                id: id,
+                quantity: parseInt(quantity)
+            };
+            let found = false
+            cart.forEach(function(item,index){
+                if(item.id == newData.id){
+                    item.quantity+=newData.quantity 
+                    found=true
+                }
+            })
+            if(!found){
+                cart.push(newData);
+            }  
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showNotification();
+            cart_update();
+    }
+  </script>
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <section style="background-color: #ffffff;">
+        <div class="container pb-5">
+            <div class="row">
+                <div class="col-lg-5 mt-5">
+                    <div class="card mb-3">
+                        <img class="card-img img-fluid" src="{{lottery.image.url}}" alt="Card image cap" id="product-detail">
+                    </div>
+                    <div class="row">
+                        <div id="multi-item-example" class="col-12 carousel slide carousel-multi-item" data-bs-ride="carousel">
+                            <div class="carousel-inner product-links-wap" role="listbox">
+                                {%if lottery.lotteryimage_set.all|is_lottery_image_set_empty%}
+                                <div class="carousel-item active" >
+                                    <div class="row">
+
+                                        {% for i in lottery.lotteryimage_set.all %}
+                                        <div class="col-2">
+                                            <a href="#">
+                                                <img class="card-img img-fluid" src="{{i.image.url}}" alt="Product Image 1">
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {%else%}
+
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-lg-6 mt-4">
+                    <div class="card" style="background-color: none; border: none;">
+                        <div class="card-body">
+                            <button class="btn btn-outline-dark btn rounded-pill" disabled>{{lottery.draw_in}}</button>
+
+                            <h1 style="font-weight: bold; font-size: 40px;" class="mt-3">{{lottery.name}}</h1>
+                            {% if lottery.cash_alternative %}
+                            <h6 style="font-weight: 700;">Cash alternative: <span style="color: #c49529;">£{{lottery.cash_alternative}}</span></h6>                 
+                            {% endif %}
+                            
+                            <h1 style="font-weight: bold; font-size: 40px;" class="mt-3">£{{lottery.price}} <span class="sold-percent">per entry</span></h1>
+                
+                            <div class="clearfix">
+                                <div style="float: left;">
+                                    <span class="">Sold: {{lottery.total_sold|perform_percentage:lottery.total_available_ticket}}%</span>
+                                </div>
+                                <div style="float:right;">
+                                    <span class="sold-percent">{{lottery.total_sold}}/{{lottery.total_available_ticket}}</span>
+                                </div>
+                            </div>
+                            <div class="progress lottery--progress" style="height: 8px;">
+                                <div class="progress-bar progress-bar-sm" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: {{lottery.total_sold|perform_percentage:lottery.total_available_ticket}}%; background-color: #f2b840;"></div>
+                            </div>
+                            <div class="clearfix">
+                                <div style="float: left;">
+                                    <span class="sold-percent">Tickets sold: {{lottery.total_sold}}/{{lottery.total_available_ticket}}</span>
+                                </div>
+                                <div style="float:right;">
+                                    <span class="sold-percent">Remaining: {{lottery.total_available_ticket|perform_subtract:lottery.total_sold}}</span>
+                                </div>
+                            </div>
+                
+                            <ul class="list-inline mt-3">
+                                <li class="list-inline-item">
+                                    <small>Being purchased: <span class="text-danger">0 Tickets</span></small>
+                                </li>
+                            </ul>
+
+                            <div class="card" style="background-color: #f4f5f7; border: 0px solid transparent; border-radius: 10px;">
+                                <div class="card-body shadow">                                    
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-pills mb-3 rounded-pill" style="border: 5px solid white;" id="entryTabs" role="tablist">
+                                        <li class="nav-item w-50" role="presentation">
+                                            <a class="nav-link active border rounded-pill text-center" id="online-entry-tab" data-bs-toggle="tab" href="#online-entry" role="tab" aria-controls="online-entry" aria-selected="true">Online Entry</a>
+                                        </li>
+                                        <li class="nav-item w-50" role="presentation">
+                                            <a class="nav-link border rounded-pill text-center" id="postal-entry-tab" data-bs-toggle="tab" href="#postal-entry" role="tab" aria-controls="postal-entry" aria-selected="false">Postal Entry</a>
+                                        </li>
+                                    </ul>
+                                    
+                                    
+                            
+                                    <!-- Tab panes -->
+                                    <div class="tab-content" id="entryTabsContent">
+                                        <div class="tab-pane text-center fade show active" id="online-entry" role="tabpanel" aria-labelledby="online-entry-tab">
+                                            <h3 class="h5 mb-5 mt-3" style="font-weight: bold;">How Many Tickets?</h3>
+                                            {% comment %} <form action="#" method="GET"> {% endcomment %}
+                                                <input type="hidden" name="product-title" value="Activewear">
+                                                <div class="row mt-4">
+                                                    <div class="col">
+                                                        <input type="range" class="form-range custom-range" id="ticketRange_{{lottery.id}}" min="1" max="{{lottery.max_entries_per_user}}" value="{{lottery.suggested_ticket_quantity}}" oninput="updateTicketQuantity({{lottery.id}})">
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-right mt-4">
+                                                    <div class="col-4 text-left">
+                                                        <span class="btn btn-outline-secondary" id="btn-minus" onclick="handle_minus({{lottery.id}})">-</span>
+                                                    </div>
+                                                    <div class="col-4 text-center">
+                                                        <ul class="list-inline">
+                                                            <li class="list-inline-item">Number of Tickets <span id="quantity_{{lottery.id}}" style="margin-left: 10px; font-size: 20px;" id="var-value">{{lottery.suggested_ticket_quantity}}</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-4 text-center">
+                                                        <span class="btn btn-outline-secondary" id="btn-plus" onclick="handle_plus({{lottery.id}})">+</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row pb-3 justify-content-center">
+                                                    <div class="col d-grid mt-3">
+                                                        <button class="btn btn-warning rounded-pill btn-lg" onclick="addToCartSingle({{lottery.id}})">
+                                                            Add To Basket
+                                                            <i class="fa fa-shopping-bag text-dark ml-5"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="clearfix mt-3">
+                                                        <div style="float: left;">
+                                                            <span style="font-size: 15px;">Max entries per user: {{lottery.max_entries_per_user}}</span>
+                                                        </div>
+                                                        <div style="float:right;">
+                                                            <span style="font-size: 15px;">Max entries: {{lottery.total_available_ticket|perform_subtract:lottery.total_sold}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% comment %} </form> {% endcomment %}
+                                        </div>
+
+                                        <div class="tab-pane fade" id="postal-entry" role="tabpanel" aria-labelledby="postal-entry-tab">
+                                            <!-- Content for Postal Entry tab -->
+                                            <div class="mt-4 text-left">
+                                                <p>To enter our competitions by post, send an unenclosed postcard via stamped post stating:</p>
+                                                <ul>
+                                                    <li>Which competition you would like to take part in</li>
+                                                    <li>The answer to the question specific to that particular competition</li>
+                                                    <li>Your personal details as follows (One Entry per Postcard):</li>
+                                                </ul>
+                                                <p>Remember postcards must also contain the correct answer to the question for the competition desired.</p>
+                                                <p>All details must be either typed or clearly written. We cannot enter you into a competition if the writing on your postcard is not legible. If we receive one postcard in the post containing multiple entries, this will not comply with the above terms and conditions. If we believe one person is attempting to enter using multiple names and addresses, all associated entries will be voided, as per the paid entry route.</p>
+                                                <p>Send entries to:</p>
+                                                <address>
+                                                    Pristine Competitions<br>
+                                                    Unit 4 Country view Business Park<br>
+                                                    132 Muldonagh Road<br>
+                                                    Claudy, BT47 4EJ
+                                                </address>
+                                                <p>All postal entries must be received before the close of the competition. Any entries that fail to follow the criteria mentioned above will be void as per any entry received. Entrants MUST have an active account on our website at the time the postal entries are processed. All details on postcards MUST match the name and address on the account to which they are to be added. Please ensure you have read and agree to our terms and conditions before entering by post or online.</p>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="card">
+            <div class="card-body">
+                <div class="container mt-3 mb-3">
+                    <div class="accordion" id="accordionExample">
+                        <!-- Price Details -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Price Details
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <!-- Price Details Content Goes Here -->
+                                    <!-- Example: -->
+                                    <p>{{lottery.price_details}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- How To Play -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    How To Play
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <!-- How To Play Content Goes Here -->
+                                    <!-- Example: -->
+                                    <p>How to play content...</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    FAQ
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <!-- FAQ Content Goes Here -->
+                                    <!-- Example: -->
+                                    <p>FAQ content...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // function handle_plus(id){
+        //     quantity_field = document.getElementById(`quantity_${id}`);
+        //     value = parseInt(quantity_field.textContent);
+        //     value++;
+      
+        //     quantity_field.textContent = value;
+        // }
+        // function handle_minus(id){
+      
+        //     quantity_field = document.getElementById(`quantity_${id}`);
+        //     value = parseInt(quantity_field.textContent);
+        //     if(value>=2){
+        //         value--;
+        //     }
+        //     quantity_field.textContent = value;
+        // }
+        function handle_minus(lotteryId) {
+            var quantityElem = document.getElementById('quantity_' + lotteryId);
+            var rangeElem = document.getElementById('ticketRange_' + lotteryId);
+            var currentValue = parseInt(quantityElem.textContent);
+            if (currentValue > 1) {
+                quantityElem.textContent = currentValue - 1;
+                rangeElem.value = currentValue - 1;
+            }
+
+        }
+
+        function handle_plus(lotteryId) {
+            var quantityElem = document.getElementById('quantity_' + lotteryId);
+            var rangeElem = document.getElementById('ticketRange_' + lotteryId);
+            var currentValue = parseInt(quantityElem.textContent);
+            var maxTickets = parseInt(rangeElem.max);
+
+
+            if (currentValue < maxTickets) {
+                quantityElem.textContent = currentValue + 1;
+                rangeElem.value = currentValue + 1;
+                console.log("rangeElem.value");
+            }
+        }
+
+        function updateTicketQuantity(lotteryId) {
+            var rangeElem = document.getElementById('ticketRange_' + lotteryId);
+            var quantityElem = document.getElementById('quantity_' + lotteryId);
+            quantityElem.textContent = rangeElem.value;
+        }
+      </script>
+
+
+    {% endblock content %}

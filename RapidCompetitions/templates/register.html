@@ -1,0 +1,75 @@
+{% extends "./partials/base.html" %}
+
+{% load static %}
+{% block title %}
+<title>Register | Rapid Competitions</title>
+{% endblock title %}
+
+{% block links %}
+    <link rel="stylesheet" href={%static "css/login.css"%}>
+{% endblock links %}
+
+
+{% block content %}
+
+<style>
+
+    .login-right{
+        background-image: url({%static "./img/Section-1.jpg"%})
+    }
+</style>
+
+<div class="container-fluid login-container">
+    <div class="row">
+        <div class="col-lg-6 col-md-12 login-left">
+            <div class="login">
+                <div class="wellcome">
+                    <h2>Sign Up</h2>
+
+                </div>
+                <div class="login-form">
+                    <form action="/auth/register" method="POST">
+                        {% csrf_token %}
+                        <div class="input-section">
+                            <label for="email"> 
+                                Email&nbsp;
+                                <span>*</span>
+                            </label>
+                            <input type="email" name="email" id="email" placeholder="Enter your Email"><br>
+                        </div>
+                        <div class="input-section">
+                            <label for="password">Password&nbsp; <span>*</span></label>
+                            <input type="password" name="password" id="password" placeholder="Enter your Password">
+                        </div>
+                        <p class="text-start mt-4" style="font-size:14px !important;">Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a style="font-size:14px !important; color:black;" href="#">privacy policy.</a> </p>
+                        <div
+                            class="g-recaptcha"
+                            data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                            >
+
+                            </div>
+
+
+                        <input type="submit" value="Register" class="submit-btn">
+
+                    </form>
+                    <button class="social-login google" onclick="location.href='{% url 'social:begin' 'google-oauth2' %}'"><i class="fa-brands fa-google" style="color: #74C0FC;"></i>Sign In with Google</button>
+                    <p class="register-now"> <span>Already have an account? </span><a href="/auth/login">Login</a></p>
+                    {% if messages %}
+                  
+                        {% for message in messages %}
+                        <p{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color:red;">{{ message }}</p>
+                        {% endfor %}
+            
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 login-right d-none d-lg-block">
+
+        </div>
+    </div>
+</div>
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock content %}

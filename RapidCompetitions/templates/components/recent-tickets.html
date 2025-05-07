@@ -1,0 +1,31 @@
+{% extends "../partials/user_portal.html" %}
+
+{% block main %}
+<div class="card" style="background-color: #fff; border-radius: 3px !important;">
+    <div class="card-body text-center">
+        <ul class="nav nav-tabs card-header-tabs row" id="ticketTabs" role="tablist">
+            <li class="nav-item col-6">
+                <a class="nav-link active" id="upcoming-tab" data-toggle="tab" href="#upcoming" role="tab" aria-controls="upcoming" aria-selected="true">Upcoming</a>
+            </li>
+            <li class="nav-item col-6">
+                <a class="nav-link" id="drawn-tab" data-toggle="tab" href="#drawn" role="tab" aria-controls="drawn" aria-selected="false">Drawn</a>
+            </li>
+        </ul>
+    </div>                    
+
+    <div class="card-body">
+        <div class="tab-content" id="ticketTabsContent">
+            <div class="tab-pane fade show active" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+                <p class="alert alert-info">
+                    You don't have any upcoming tickets.
+                </p>
+            </div>
+            <div class="tab-pane fade" id="drawn" role="tabpanel" aria-labelledby="drawn-tab">
+                <p class="alert alert-info">
+                    You don't have any drawn tickets.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

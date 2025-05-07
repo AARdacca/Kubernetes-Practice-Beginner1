@@ -1,0 +1,14 @@
+{% extends "./partials/base.html" %} {% load static %} {% block title %}
+<title>Please Make Your Payment</title>
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock title %} {% block links %} {% endblock links %} {% block content %}
+
+<h1>Orderd Item List And Payment Page</h1>
+<form action="/checkout/payment/{{order.id}}/" method="POST">
+  {% csrf_token %}
+  <button type="submit" id="checkout-button">Checkout</button>
+</form>
+<script>
+  localStorage.removeItem("cart");
+</script>
+{% endblock content %}

@@ -1,0 +1,433 @@
+{% extends "./partials/base.html" %} {% load static %}
+{% load custum_templatetags %} {% block title %}
+<title>Rapid Competitions</title>
+{% endblock title %} {% block links %} {% endblock links %} {% block content %}
+<style>
+
+  .red{
+    background-color: red !important;
+  }
+  .gold{
+    background-color: #f2b840;
+  }
+
+
+  @media (max-width: 600px) {
+
+  
+      .position-absolute{
+        position: initial !important;
+        
+      }
+ 
+      .mobile-screen{
+        transform : none !important;
+        border-radius: 0px !important;
+      }
+      .mobile-screen-2{
+        justify-content : left !important;
+        white-space: nowrap;
+      }
+  
+      .carousel-background{
+        background-image: var(--mob-image) !important;
+        background-size: contain;
+        background-position: top;
+        
+      }
+
+  }
+</style>
+<!-- Modal -->
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="w-100 pt-1 mb-5 text-right">
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <form action="" method="get" class="modal-content modal-body border-0 p-0">
+      <div class="input-group mb-2">
+        <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ..." />
+        <button type="submit" class="input-group-text bg-success text-light">
+          <i class="fa fa-fw fa-search text-white"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Start Banner Hero -->
+<div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <!-- Dynamic slides will be inserted here -->
+  </div>
+
+  <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button"
+    data-bs-slide="prev">
+    <i class="fas fa-chevron-left"></i>
+  </a>
+  <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button"
+    data-bs-slide="next">
+    <i class="fas fa-chevron-right"></i>
+  </a>
+</div>
+
+
+<!-- End Banner Hero -->
+
+<div class="position-relative">
+  <div class="mobile-screen container category-bar position-absolute bg-white py-3 shadow" style="left: 50%; transform: translateX(-50%); bottom: -40px; z-index: 10; border-radius: 15px;">
+    <div class="row">
+      <div class="col-12">
+        <div class=" mobile-screen-2 d-flex justify-content-center overflow-auto">
+          {% for cat in catagories %}
+          <a href="#{{cat.name}}" class="btn bg-none mx-2">{{cat.name}}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- content start -->
+<div class="container py-5 mt-5">
+  <!-- <div class="row mb-5" id="Ending Soon">
+    <div class="d-flex justify-content-between mb-3">
+      <h4>Ending Soon</h4>
+      {% comment %} <a href="/lottery/get_category/{{j.id}}/" class="btn rounded-pill"
+        style="background-color: #ffc107; width: 130px">See All</a> {% endcomment %}
+    </div>
+    {% for j in catagories%}
+    {% for i in j|give_me_ending_soon_lottery_list%}
+    {% with lottery=i x=0 %}
+    {%include "./components/lottary.html"%}
+    {% endwith %}
+    {% endfor %}
+    {% endfor %}
+  </div> -->
+
+  {% for j in catagories %} {% if j|is_category_empty %} {% else %}
+  <div class="row mb-5" id="{{j.name}}">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0">{{j.name}}</h4>
+      <a href="/competition/get_category/{{j.id}}/" class="btn btn-capsule" style="background-color: #f2b840; font-weight: bold !important;">View All</a>
+    </div>
+    
+
+    {% for i in j|give_me_all_lottery_of_a_category %}
+    {% with lottery=i x=1 %}
+    {%include "./components/lottary.html"%}
+    {% endwith %}
+    {% endfor %}
+  </div>
+  {% endif %} {% endfor %}
+</div>
+
+
+
+<section style="background-color: #f2b840;">
+  <div class="container">
+    <div class="row text-center pt-5 pb-3 justify-content-center align-items-center">
+      <div class="col-lg-6 m-auto">
+        <h1 style="font-weight: bold !important; text-transform: uppercase;">Why Choose Us?</h1>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4 pb-3"> <!-- Reduced margin here from pb-5 to pb-4 -->
+        <div class="card h-100 py-4 px-3" style="border: none; border-radius: 10px;">
+          <div class="row align-items-center">
+            <div class="col-3 text-center">
+              <div class="h2 text-dark"><i class="fas fa-shield-alt"></i></div>
+            </div>
+            <div class="col-9">
+              <h2 class="h5 mt-3" style="color: #f2b840; font-weight: bold !important;">Best Odds</h2>
+              <p>Limited tickets in each draw</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-6 col-lg-4 pb-3"> <!-- Reduced margin here from pb-5 to pb-4 -->
+        <div class="card h-100 py-4 px-3" style="border: none; border-radius: 10px;">
+          <div class="row align-items-center">
+            <div class="col-3 text-center">
+              <div class="h2 text-dark"><i class="fas fa-handshake"></i></div>
+            </div>
+            <div class="col-9">
+              <h2 class="h5 mt-2" style="color: #f2b840; font-weight: bold !important;">Guaranteed Winners</h2>
+              <p>Guaranteed winner even if tickets don't sell out</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-6 col-lg-4 pb-3"> <!-- Reduced margin here from pb-5 to pb-4 -->
+        <div class="card h-100 py-4 px-3" style="border: none; border-radius: 10px;">
+          <div class="row align-items-center">
+            <div class="col-3 text-center">
+              <div class="h2 text-dark"><i class="fa fa-user-shield"></i></div>
+            </div>
+            <div class="col-9">
+              <h2 class="h5 mt-2" style="color: #f2b840; font-weight: bold !important;">Live Draws</h2>
+              <p>We show the number of entries in every draw</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section style="background-color: #f5f6f7;">
+  <div class="container">
+    <div class="row text-center pt-5 pb-3 justify-content-center align-items-center">
+      <div class="col-lg-6 m-auto">
+        <h1 style="font-weight: bold !important; text-transform: uppercase;">How To Play</h1>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4 pb-4">
+        <div class="card h-100 py-4 px-3" style="border: none; height:158px !important; border-radius: 10px;">
+          <div class="row align-items-center pt-2">
+            <div class="col-3 text-center">
+              <div class="h2 text-dark" style="margin-top: 10px;"><img style="height: 65px;" src="https://7daysperformance.co.uk/assets/svg-icons/prize-gray.svg" alt=""></div>
+            </div>
+            <div class="col-9">
+              <p class="mt-3 mb-2" style="color: #f2b840; line-height: .2; font-family: Exo, sans-serif; font-weight: bold !important;">01 STEP</p>
+              <p style="font-family: Exo, sans-serif; font-weight: bold !important; margin-bottom: 0;">Select your prize and entries</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-6 col-lg-4 pb-4">
+        <div class="card h-100 py-4 px-3" style="border: none; height:158px !important; border-radius: 10px;">
+          <div class="row align-items-center pt-2">
+            <div class="col-3 text-center">
+              <div class="h2 text-dark" style="margin-top: 10px;"><img style="height: 65px;" src="https://7daysperformance.co.uk/assets/svg-icons/answer.svg" alt=""></div>
+            </div>
+            <div class="col-9">
+              <p class="mt-3 mb-2" style="color: #f2b840; line-height: .2; font-family: Exo, sans-serif; font-weight: bold !important;">02 STEP</p>
+              <p style="font-family: Exo, sans-serif; font-weight: bold !important; margin-bottom: 0;">Answer the question correctly</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-6 col-lg-4 pb-4">
+        <div class="card h-100 py-4 px-3" style="border: none; height:158px !important; border-radius: 10px;">
+          <div class="row align-items-center pt-2">
+            <div class="col-3 text-center">
+              <div class="h2 text-dark" style="margin-top: 10px;"><img style="height: 65px;" src="https://7daysperformance.co.uk/assets/svg-icons/microphone.svg" alt=""></div>
+            </div>
+            <div class="col-9">
+              <p class="mt-3 mb-2" style="color: #f2b840; line-height: .2; font-family: Exo, sans-serif; font-weight: bold !important;">03 STEP</p>
+              <p style="font-family: Exo, sans-serif; font-weight: bold !important; margin-bottom: 0;">Winner announced on Live Draw</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section style="background-color: #f4f5f7;">
+  <div class="container">
+    <div class="row text-center pt-5 pb-3">
+      <div class="col-lg-6 m-auto">
+        <h2 style="font-weight: bold !important;">Customer Reviews</h2>
+        <p class="text-muted">What our customers are saying about us</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 pb-5">
+        <div class="card h-100 py-2 shadow p-3" style="border: none; border-radius: 10px;">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="">
+                <h5 class="card-title mb-0">Johnathan Roberts</h5>
+                <p class="text-muted mb-0">8 hours age</p>
+              </div>
+            </div>
+            <p class="card-text"><span style="font-weight: bold !important;">Great experience from start to finish</span> The website was super easy to use, and entering the competition was a breeze. I loved how quickly I could sign up. Can’t wait to see if I win!
+              </p>
+            <div class="text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 pb-5">
+        <div class="card h-100 py-2 shadow p-3" style="border: none; border-radius: 10px;">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="">
+                <h5 class="card-title mb-0">Emily Sanchez</h5>
+                <p class="text-muted mb-0">15 hours ago</p>
+              </div>
+            </div>
+            <p class="card-text"><span style="font-weight: bold !important;">Smooth and enjoyable process</span>
+              Entered the competition without any hassle. The website's layout is clear, and payment was straightforward.</p>
+            <div class="text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 pb-5">
+        <div class="card h-100 py-2 shadow p-3" style="border: none; border-radius: 10px;">
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="">
+                <h5 class="card-title mb-0">Michael Thompson</h5>
+                <p class="text-muted mb-0">20 hours ago</p>
+              </div>
+            </div>
+            <p class="card-text"><span style="font-weight: bold !important;">Love Rapid Competitions!</span><br>
+              Just entered a competition today, the prizes are fantastic. Just waiting to win now haha</p>
+            <div class="text-warning">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<script>
+  // Define your dynamic slide data
+  {% comment %} const slides = [
+    {
+      backgroundImage: 'url({% static "img/hero_banner.jpeg" %})',
+      title: 'Win Tax-Free Cash',
+      subtitle: 'Daily Draws',
+      buttonText: 'Enter Now',
+      buttonLink: '#'
+    },
+    // Add more objects for additional slides
+  ]; {% endcomment %}
+
+  const slides = JSON.parse('{{ lottery_json|escapejs }}');
+  console.log(slides);
+
+  // Function to populate the carousel with dynamic content
+  function populateCarousel() {
+    const carouselInner = document.querySelector('.carousel-inner');
+
+    slides.forEach((slide, index) => {
+      console.log(slide);
+      console.log(slide.pk)
+      const isActive = index === 0 ? 'active' : ''; // Ensure first slide is active
+      const slideContent = `
+      <div class="carousel-item ${isActive}">
+        <div style="background-image: url(${slide.image}); --mob-image: url(${slide.mobile_image});" class="carousel-background"></div>
+        <div class="carousel-overlay"></div>
+        <div class="carousel-content">
+          <div class="carousel-text">
+            <h1 class="h1" style="text-transform:uppercase; font-family: Exo, sans-serif; font-weight: 900z !important;">${slide.name}</h1>
+            <p class="h3 p-3" style="text-transform: uppercase; font-family: Exo, sans-serif; font-weight: 900 !important; color: #ffc107">${slide.des}</p>
+            <a href="/competition/competition/${slide.id}/" class="btn btn-warning btn-capsule text-dark" style="font-family: Cantarell; text-transform: uppercase; font-weight: bold !important;">
+              Enter <i class="fas fa-ticket fa-fw" style="margin-left: 10px !important;"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+      carouselInner.innerHTML += slideContent;
+    });
+  }
+
+
+  // Hide carousel controls if there is only one slide
+  const carouselControls = document.querySelectorAll('.carousel-control-prev, .carousel-control-next');
+  if (slides.length <= 1) {
+    carouselControls.forEach(control => {
+      control.style.display = 'none';
+    });
+  }
+
+  // Call the function to populate the carousel on page load
+  window.addEventListener('load', populateCarousel);
+</script>
+
+
+<script>
+  function handle_plus(id) {
+    quantity_field = document.getElementById(`quantity_${id}`);
+    value = parseInt(quantity_field.value);
+    value++;
+
+    quantity_field.value = value;
+  }
+  function handle_minus(id) {
+
+    quantity_field = document.getElementById(`quantity_${id}`);
+    value = parseInt(quantity_field.value);
+    if (value >= 2) {
+      value--;
+    }
+    quantity_field.value = value;
+  }
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const countdownElements = document.querySelectorAll('.draw-date');
+      const oneDayInMs = 24 * 60 * 60 * 1000;
+
+      countdownElements.forEach(function(element) {
+        const date = element.getAttribute('data-date');
+        const timeZone = element.getAttribute('data-timezone');
+        const targetDate =  new Date(date + ' UTC');
+          
+          console.log(targetDate);
+          const now = new Date();
+          console.log(now);
+
+          if (targetDate - now < oneDayInMs) {
+              const countdownInterval = setInterval(function() {
+                  const now = new Date();
+                  const timeDifference = targetDate - now;
+
+                  if (timeDifference <= 0) {
+                      clearInterval(countdownInterval);
+                      element.innerHTML = 'Time is up!';
+                  } else {
+                      const hours = Math.floor((timeDifference % (oneDayInMs)) / (1000 * 60 * 60));
+                      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                      element.innerHTML = `ENDS IN ${hours}:${minutes}:${seconds}`;
+                      element.classList.add("red");
+                  }
+              }, 1000);
+          }
+      });
+  });
+</script>
+
+{% endblock content %}

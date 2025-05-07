@@ -1,0 +1,291 @@
+{% extends "./partials/base.html" %}
+{% load static %}
+{% block title %}
+<title>Rapid Competitions</title>
+{% endblock title %}
+
+{% block links %}
+   
+{% endblock links %}
+
+
+{% block content %}
+
+<style>
+    .p-4{
+        display: none;
+    }
+
+  @media (max-width: 600px) {
+
+    .table-borderless>:not(caption)>*>* {
+    border-bottom-width: 0;
+    display: block;
+}
+    .p-3{
+        text-align: center;
+    }
+    #tr-1{
+        display: none;
+    }
+    .td-3{
+    display: none !important;
+    }
+    .table-borderless th{
+        display: none !important;
+    }
+    .p-4{
+        display: block;
+        padding-top: 35px !important;
+    }
+    .td-2{
+        display: flex !important;
+        align-items: center;
+    }
+    .td-4{
+        display: none !important;
+    }
+    .input-group{
+        height: 60px;
+    }
+    .table-borderless tr{
+        display: block;
+        margin-top: 10px !important;
+        box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5) !important;
+        margin-bottom: 20px;
+    }
+
+  }
+</style>
+
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- content start -->
+    <div class="container py-5">
+        <div class="row">
+            {%include "./components/cart.html"%}
+        </div>
+    </div>
+    <!-- content end -->
+
+
+
+
+    <script>
+
+        function handle_delete(id) {
+            var storedItem = localStorage.getItem('cart');          
+            storedItem =  storedItem ? JSON.parse(storedItem) : null;
+            if(storedItem!=null){
+                const indexToDelete = storedItem.findIndex(item => item.id === id);
+                if (indexToDelete !== -1) {
+                    storedItem.splice(indexToDelete, 1);
+                }
+                storedItem = JSON.stringify(storedItem);
+                localStorage.setItem('cart', storedItem);
+                row = document.getElementById(`tr_${id}`);
+                if(row){
+                    row.remove();
+                }
+
+            }
+            cart_update();
+            update_subtotal();
+        }
+        function handle_plus(id){
+            var storedItem = localStorage.getItem('cart');          
+            storedItem =  storedItem ? JSON.parse(storedItem) : null;
+            if(storedItem!=null){
+                const itemToPlus = storedItem.find(item => item.id === id);
+                itemToPlus.quantity+=1;
+            }
+            storedItem = JSON.stringify(storedItem);
+            localStorage.setItem('cart', storedItem);
+            quantity_field = document.getElementById(`quantity_${id}`);
+            value = parseInt(quantity_field.value);
+            value++;
+
+            quantity_field.value = value;
+            quantityOnChangeHandler(id);
+            cart_update();
+            update_subtotal();
+        }
+        function handle_minus(id){
+            var storedItem = localStorage.getItem('cart');          
+            storedItem =  storedItem ? JSON.parse(storedItem) : null;
+            if(storedItem!=null){
+                const itemToPlus = storedItem.find(item => item.id === id);
+                if(itemToPlus.quantity>=2){
+                    itemToPlus.quantity-=1;
+                }
+                
+            }
+            storedItem = JSON.stringify(storedItem);
+            localStorage.setItem('cart', storedItem);
+            quantity_field = document.getElementById(`quantity_${id}`);
+            value = parseInt(quantity_field.value);
+            if(value>=2){
+                value--;
+            }
+            
+
+            quantity_field.value = value;
+            quantityOnChangeHandler(id);
+            cart_update();
+            update_subtotal()
+        }
+        function quantityOnChangeHandler(id){
+            var price = document.getElementById(`td_price${id}`);
+            var subtotal = document.getElementById(`td_subtotal${id}`);
+            var quantity = document.getElementById(`quantity_${id}`);
+            var total = parseFloat(price.textContent)*parseInt(quantity.value);
+            subtotal.textContent = `${total.toFixed(2)}`;
+            
+        }
+        function quantityOnChangeHandler2(id) {
+            var storedItem = localStorage.getItem('cart');    
+            var quantity = parseInt(document.getElementById(`quantity_${id}`).value);      
+            storedItem =  storedItem ? JSON.parse(storedItem) : null;
+            if(storedItem!=null){
+                const itemToPlus = storedItem.find(item => item.id === id);
+                if(quantity>=1){
+                    itemToPlus.quantity = quantity;
+                    storedItem = JSON.stringify(storedItem);
+                    localStorage.setItem('cart', storedItem);
+                    quantityOnChangeHandler(id);
+                }
+                else{
+                    x = document.getElementById(`quantity_${id}`);
+                    x.value = itemToPlus.quantity;
+                }
+                
+            }
+
+            cart_update();
+            update_subtotal()
+        }
+        function add_new_row(data) {
+        const tbody = document.getElementById('product-tbody');
+        const newRow = document.createElement('tr');
+        newRow.setAttribute('id', `tr_${data.id}`);
+        newRow.innerHTML = `
+                     <td class="td-1">
+                            <div class="product-info d-flex align-items-center">
+                                <button type="button" class="btn btn-lg bg-none" id="delete_${data.id}" onclick="handle_delete(${data.id})"><i class="fas fa-trash-alt"></i></button>
+                                <img src="${data.image}" alt="Product Image" class="img-fluid" style="width: 70px; height: 70px; margin-right: 20px; margin-left: 20px;"> 
+                                <div class="">
+                                    <a class="mb-0 h4 text-dark" href="/competition/competition/${data.id}/">${data.name}</a>
+                                    <p>
+                                        
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                        
+                        
+                        <td class="td-2"> 
+                            <div class="input-group" style="border: 1px solid #dee2e6; border-radius: .25rem;">
+                                <button class="btn o-btn-outline-quantity button-minus" type="button" id="minusbtn_${data.id}" onclick="handle_minus(${data.id})"><span class="fa fa-minus"></span></button>
+                                <input type="number" id="quantity_${data.id}" class="input-text qty text form-control text-center" name="quantity" value="${data.quantity}" title="Qty" size="4" min="1" max="" onChange="quantityOnChangeHandler2(${data.id})" step="1" placeholder="" inputmode="numeric" autocomplete="off" data-product_id="3838865">
+                                <button id="plusbtn_${data.id}" class="btn o-btn-outline-quantity button-plus" type="button" onclick="handle_plus(${data.id})"><span class="fa fa-plus"></span></button>
+                            
+                            </div>
+                            <p class="p-4">£<span id="td_subtotal${data.id}">${(data.price*data.quantity).toFixed(2)}</span></p>
+                        </td>
+                        <td class="td-3">£<span id="td_price${data.id}">${data.price}</span></td> 
+                        <td class="td-4">£<span id="td_subtotal${data.id}">${(data.price*data.quantity).toFixed(2)}</span></td>
+        `;
+
+
+        tbody.appendChild(newRow);
+}
+
+</script>
+
+<script>
+        function getCartFromLocalStorage() {
+        var storedItem = localStorage.getItem('cart');          
+        storedItem =  storedItem ? JSON.parse(storedItem) : [];
+
+        return storedItem;
+
+    }
+
+    function getCookie(name) {
+        const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+        return cookieValue ? cookieValue.pop() : '';
+    }
+    function update_subtotal(){
+        var subtotal = document.getElementById("subtotal");
+        var total_value = document.getElementById("total");
+        console.log(subtotal);
+        console.log(total_value);
+        var storedItem = getCartFromLocalStorage();
+        var total = 0;
+        storedItem.forEach(function(item,index){
+            total+= (parseInt(item.quantity) * parseFloat(item.price))
+        })
+        console.log(total);
+        total_value.textContent = total.toFixed(2);
+        subtotal.textContent = total.toFixed(2);
+    }
+
+    update_subtotal();
+
+    function loadCartDataById(){
+
+        var storedItem = getCartFromLocalStorage();
+        const domainWithProtocol = `${window.location.protocol}//${window.location.host}`;
+        console.log(domainWithProtocol);
+        const url = `${domainWithProtocol}/competition/get_lottery_info/`;
+        const data = {
+        'id_list' : storedItem
+
+        };
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(data)
+            })
+            .then(response => response.json()) // Parse the JSON response
+            .then(result => {
+            console.log('Success:', result);
+            result.forEach(function(item,index){
+                console.log(item.image)
+                item.quantity = storedItem.find(i => i.id === item.id).quantity;
+                add_new_row(item);
+            })
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            });
+
+    }
+    loadCartDataById();
+
+
+        
+    </script>
+
+
+
+
+    {% endblock content %}

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rapidcomp-deployment
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rapidcomp
+  template:
+    metadata:
+      labels:
+        app: rapidcomp
+    spec:
+      containers:
+      - name: rapidcomp
+        image: aliahasan/ostad-mastering_devops_batch001-module06:rapidcomp_app-v1
+        ports:
+        - containerPort: 8000

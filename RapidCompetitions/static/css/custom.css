@@ -1,0 +1,121 @@
+li a .nav-link {
+    color: white;
+}
+
+.custom-card {
+    background-color: #ffffff;
+    color: #000;
+    border: none;
+    border-bottom-left-radius: 15px;
+    overflow: hidden;
+}
+
+.custom-card img {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.draw-date {
+    width: 80%; /* Adjust width as needed */
+    text-align: center; 
+    position: absolute;
+    bottom: -14px;
+    left:50%;
+    transform: translateX(-50%);
+    background-color: #2aef8c;
+    padding: 6px 22px;
+    color: black;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    text-transform: uppercase;
+}
+
+
+.custom-card .card-body {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 10px;
+}
+
+.sold-percent {
+    font-size: 12px;
+}
+
+.full-width-btn {
+    width: 100%;
+    font-weight: 900;
+}
+
+.full-width-btn:hover {
+    background-color: #d9a131;
+    border: none;
+}
+
+.pagination .page-link {
+    color: #000 !important;
+}
+.pagination .page-link:hover {
+    background-color: #ffc107 !important; /* Warning color */
+}
+.pagination .page-item.disabled .page-link {
+    color: #6c757d !important;
+}
+
+
+
+.sidebar {
+    height: 60vh;
+    background-color: #f8f9fa;
+    padding-top: 20px;
+}
+.sidebar a {
+    color: #333;
+}
+#portal_menu .nav-item:hover {
+    background-color: #ddd;
+    color: #000;
+}
+.content {
+    padding: 20px;
+}
+.content h2 {
+    margin-top: 0;
+}
+#portal_menu .nav-item {
+    background-color: #ffffff;
+    margin-bottom: 7px;
+    padding: 5px;
+    border-radius: 5px;
+}
+#portal_menu .nav-item .nav-link {
+    font-size: 14px !important;
+}
+#portal_menu .active {
+    border: 1px solid black;
+}
+
+.nav-tabs .nav-item {
+    border-radius: 10px !important;
+}
+
+.nav-tabs .nav-item .nav-link {
+    text-transform: uppercase;
+    color: #000; 
+    font-size: 14px !important;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+    border: 2px solid #747380;
+}
+
+.nav-tabs .nav-item .nav-link:not(.active) {
+    background-color: #eaeaea;
+}
+
+.entry-btn:hover {
+    background-color: #f2b840;
+    color: rgb(255, 255, 255) !important;
+}
+
+

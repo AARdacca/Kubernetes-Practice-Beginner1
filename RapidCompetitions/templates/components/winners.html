@@ -1,0 +1,36 @@
+<h1 style="font-weight: 900; font-size: 60px;" class="text-center p-4">
+    Winners
+</h1>
+
+
+{% for i in winner %}
+<div class="col-md-3 mb-4">
+    <div class="card custom-card shadow">
+        <div class="position-relative">
+            {% if i.winner_photo %}
+            <img class="card-img-top" src="{{i.winner_photo.url}}" alt="image">
+            {% endif %}
+        </div>
+        <div class="card-body p-3">
+            <h6 class="card-title mt-2">{{i.lottery.name}}</h6>
+            
+
+            <div>
+                <h5 class="mt-3"><span class="sold-percent">Winner</span></h5>
+                <h6 style="font-weight: bold; line-height: .5;">{{i.user.first_name}} {{i.user.last_name}}</h6>
+            </div>
+
+            <div>
+                <h5 class="mt-3"><span class="sold-percent">Location</span></h5>
+                <h6 style="font-weight: bold; line-height: .5;">{{i.ticket.order.town}}</h6>
+            </div>
+
+            <div>
+                <h5 class="mt-3"><span class="sold-percent">Winning Number</span></h5>
+                <h6 style="font-weight: bold; line-height: .5;">{{i.ticket.id}}</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}

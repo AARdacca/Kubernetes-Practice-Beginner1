@@ -171,6 +171,58 @@ http://54.193.35.129:30007
 
 ---
 
+## Docker and Kubernetes Deployment Logs
+
+This document includes screenshots demonstrating key steps in the deployment of a Dockerized Django application to a Kubernetes cluster running on an AWS EC2 RHEL instance.
+
+---
+
+### Docker Image Push
+
+![Docker Image Push 1](README/Images/Docker%20Image%20Push%20(1).png)
+*Docker image tagged and push started.*
+
+![Docker Image Push 2](README/Images/Docker%20Image%20Push%20(2).png)
+*Docker image push in progress.*
+
+![Docker Image Push 3](README/Images/Docker%20Image%20Push%20(3).png)
+*Docker image successfully pushed to Docker Hub.*
+
+---
+
+### EC2 RHEL Instance Setup
+
+![EC2 Instance RHEL 1](README/Images/EC2_Instance_RHEL%20(1).png)
+*RHEL instance launched on AWS EC2.*
+
+![EC2 Instance RHEL 2](README/Images/EC2_Instance_RHEL%20(2).png)
+*Security group configuration for Kubernetes.*
+
+![EC2 Instance RHEL 3](README/Images/EC2_Instance_RHEL%20(3).png)
+*Instance details overview.*
+
+---
+
+### Kubernetes Deployment
+
+![Pods Running in Production](README/Images/Pods%20running%20in%20production%20namespace.png)
+*Pods successfully running in the `production` namespace.*
+
+---
+
+> All screenshots are saved in `README/Images/` for reference and validation.
+
+---
+
+### Deployment Demonstration (Video)
+
+Below is the screen recording of the entire deployment process:
+
+**Video:**  
+[Click to Play Video](README/Videos/Video.mp4)
+
+---
+
 ## Submission Checklist
 
 - [x] Dockerfile placed outside project directory
