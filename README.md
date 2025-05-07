@@ -91,31 +91,17 @@ docker push aliahasan/ostad-mastering_devops_batch001-module06:rapidcomp_app-v1
 
 ### 4. Launch EC2 Instance
 
+[AWS EC2 RHEL Instance Setup — Guide](README/README_RHEL_Setup-Guide.md)
+
 ```bash
-chmod 400 Pair_key_01.pem
-ssh -i Pair_key_01.pem ubuntu@52.53.175.164
+chmod 400 KeyPair.pem
+ssh -i KeyPair.pem ec2-user@54.193.35.129
 ```
 
 ### 5. Install Kubernetes Tools on EC2
+ 
+[Install Kubernetes (kubelet, kubeadm, kubectl) on RHEL — Guide](README/README_Kubernetes_kubelet_kubeadm_kubectl_Install_RHEL.md)
 
-```bash
-sudo apt update && sudo apt install -y docker.io
-sudo systemctl enable --now docker
-
-# Install kubeadm, kubelet, kubectl
-sudo apt install -y apt-transport-https ca-certificates curl
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo apt update && sudo apt install -y kubelet kubeadm kubectl
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
-```
 
 ### 6. Create Namespace
 
@@ -125,7 +111,7 @@ kubectl create namespace production
 
 ### 7. Deploy Application
 
-**deployment.yaml**:
+**personal_files/deployment.yaml**:
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -149,7 +135,7 @@ spec:
         - containerPort: 8000
 ```
 
-**service.yaml**:
+**personal_files/service.yaml**:
 ```yaml
 apiVersion: v1
 kind: Service
@@ -167,8 +153,8 @@ spec:
 ```
 
 ```bash
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
+kubectl apply -f personal_files/deployment.yaml
+kubectl apply -f personal_files/service.yaml
 ```
 
 ### 8. Verify
@@ -180,7 +166,7 @@ kubectl get svc -n production
 
 Access your app at:
 ```
-http://52.53.175.164:30007
+http://54.193.35.129:30007
 ```
 
 ---
